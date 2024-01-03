@@ -25,7 +25,7 @@ const MessageBox = ({
 
 
 //  const isOwn = session.data?.user?.email === data?.sender?.email
-const isOwn = Math.round(Math.random());
+const isOwn = data.id % 2;
 
 //   const seenList = (data.seen || [])
 
