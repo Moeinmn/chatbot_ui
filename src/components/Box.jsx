@@ -25,7 +25,7 @@ const MessageBox = ({
 
 
 //  const isOwn = session.data?.user?.email === data?.sender?.email
-const isOwn = data.id % 2;
+const isOwn = data?.sender === "user" ? false : true;
 
 //   const seenList = (data.seen || [])
 
@@ -51,8 +51,7 @@ const isOwn = data.id % 2;
       <div className={body}>
         <div className="flex items-center gap-1">
           <div className="text-sm text-gray-500">
-            {"Moein"}
-            {/* {data?.sender?.name || "Moein"} */}
+            {data?.sender || ""}
           </div>
           {/* <div className="text-xs text-gray-400">
             {format(new Date(data.createdAt), 'p')}

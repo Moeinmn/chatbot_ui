@@ -11,18 +11,25 @@ import {
   useForm 
 } from "react-hook-form";
 import axios from "axios";
+import { useChat } from "../store/chat.state";
+import { useEffect } from "react";
 //import { CldUploadButton } from "next-cloudinary";
 //import useConversation from "@/app/hooks/useConversation";
 
 const Form = () => {
   //const { conversationId } = useConversation();
 
+  const chat = useChat((s)=> s) 
+
   const {
     register,
     handleSubmit,
     setValue,
+    reset,
+    formState,
     formState: {
       errors,
+      isSubmitSuccessful
     }
   } = useForm({
     defaultValues: {
@@ -31,11 +38,16 @@ const Form = () => {
   });
 
   const onSubmit= (data) => {
-    setValue('message', '', { shouldValidate: true });
-    axios.post('/api/messages', {
-      ...data,
-      conversationId: conversationId
+    console.log({data});
+    chat.appendMessage({
+      body: data.message ,
+      sender: "user",
+      id: 8,
     })
+    // axios.post('/api/messages', {
+    //   ...data,
+    //   conversationId: conversationId
+    // })
   }
 
   const handleUpload = (result) => {
@@ -44,6 +56,14 @@ const Form = () => {
       conversationId: conversationId
     })
   }
+
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset({
+        message: ''
+      })
+    }
+  }, [formState , reset])
 
   return ( 
     <div 
@@ -57,6 +77,7 @@ const Form = () => {
         gap-2 
         lg:gap-4 
         w-full
+        rounded-b-lg
       "
     >
       {/* <CldUploadButton 
@@ -67,7 +88,7 @@ const Form = () => {
         <HiPhoto size={30} className="text-sky-500" />
       </CldUploadButton> */}
       <form 
-        onSubmit={handleSubmit(onSubmit)} 
+        onSubmit={handleSubmit(onSubmit)}
         className="flex items-center gap-2 lg:gap-4 w-full"
       >
         <MessageInput 

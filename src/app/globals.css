@@ -18,10 +18,17 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+  direction: rtl;
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.scroll_bar_styling::-webkit-scrollbar {
+  /* display: none; */
+  width: 8px;
+  color: #888;
 }

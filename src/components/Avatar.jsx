@@ -9,7 +9,7 @@ import Image from "next/image";
 //   user?: User;
 // };
 
-const Avatar = ({ user }) => {
+const Avatar = ({user}) => {
   //const { members } = useActiveList();
   //const isActive = members.indexOf(user?.email!) !== -1;
   const isActive = true
@@ -27,7 +27,7 @@ const Avatar = ({ user }) => {
       ">
         <Image
           fill
-          src={user?.image || '/images/placeholder.jpg'}
+          src={(user === "bot" ? '/images/bot.webp' :'/images/placeholder.jpg')}
           alt="Avatar"
         />
       </div>

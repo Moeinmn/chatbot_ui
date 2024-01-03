@@ -4,26 +4,30 @@ import Image from "next/image";
 import MessageBox from "./Box";
 import Form from "./Form";
 import { useEffect, useState , useRef} from "react";
+import {useChat} from "../store/chat.state"
 // import { useEffect, useState } from "react";
 
 export default function MainChat() {
 
   const bottomRef = useRef(null);
 
-  const initialMessages =     [{ body: "AAAA", id: 1 },
-  { body: "abcd", id: 2 },
-  { body: "abcd", id: 3 },
-  { body: "abcd", id: 4 },
-  { body: "abcd", id: 5 },
-  { body: "abcd", id: 6 },
-  { body: "abcd", id: 1 },
-  { body: "abcd", id: 2 },
-  { body: "abcd", id: 3 },
-  { body: "abcd", id: 4 },
-  { body: "abcd", id: 5 },
-  { body: "ZZZZZ", id: 6 },]
+  const messages = useChat((s)=>s.messages)
 
-  const [messages, setMessages] = useState(initialMessages);
+
+  // const initialMessages =     [{ body: "AAAA", id: 1 },
+  // { body: "سلام خوبی !", id: 2 },
+  // { body: "سلام خوبی !", id: 3 },
+  // { body: "سلام خوبی !", id: 4 },
+  // { body: "سلام خوبی !", id: 5 },
+  // { body: "سلام خوبی !", id: 6 },
+  // { body: "سلام خوبی !", id: 1 },
+  // { body: "سلام خوبی !", id: 2 },
+  // { body: "سلام خوبی !", id: 3 },
+  // { body: "سلام خوبی !", id: 4 },
+  // { body: "سلام خوبی !", id: 5 },
+  // { body: "ZZZZZ", id: 6 },]
+
+  //const [messages, setMessages] = useState(initialMessages);
 
   useEffect(()=>{
     console.log(messages);
@@ -82,12 +86,13 @@ export default function MainChat() {
       background: "-webkit-linear-gradient(to right, #5B86E5, #36D1DC)",
       background: "linear-gradient(to right, #5B86E5, #36D1DC)",
     }}
-    onClick={()=>{
-      setMessages(current => [...current , {body: "ZZZZZ", id: 6}])
-    }}
+    // onClick={()=>{
+    //   setMessages(current => [...current , {body: "ZZZZZ", id: 6}])
+    // }}
     >
       <div className="w-full h-full bg-white rounded-lg">
-      <div className="w-full flex-1 h-[70vh] overflow-y-auto">
+      <div className="flex flex-col-reverse w-full flex-1 h-[70vh] overflow-y-auto scroll_bar_styling">
+        <div className="h-fit">
         {messages.map((message, i) => (
           <MessageBox
             isLast={i === messages.length - 1}
@@ -96,6 +101,7 @@ export default function MainChat() {
           />
         ))}
         <div className="pt-2" ref={bottomRef} />
+        </div>
       </div>
       <Form />
       </div>
