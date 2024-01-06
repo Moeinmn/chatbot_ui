@@ -13,11 +13,10 @@ import {
 import axios from "axios";
 import { useChat } from "../store/chat.state";
 import { useEffect } from "react";
-//import { CldUploadButton } from "next-cloudinary";
-//import useConversation from "@/app/hooks/useConversation";
+import cahtLodingStore from "../store/chat.loading"
 
 const Form = () => {
-  //const { conversationId } = useConversation();
+  const cahtLoding = cahtLodingStore()
 
   const chat = useChat((s)=> s) 
 
@@ -38,24 +37,42 @@ const Form = () => {
   });
 
   const onSubmit= (data) => {
-    console.log({data});
     chat.appendMessage({
       body: data.message ,
+      type:"text",
       sender: "user",
       id: 8,
     })
-    // axios.post('/api/messages', {
-    //   ...data,
-    //   conversationId: conversationId
-    // })
+    cahtLoding.setLoading(true)
+  
+    axios.post('http://38.242.132.56:11000', {
+    "message": data.message
+  })
+  .then((res) => {
+    cahtLoding.setLoading(false)
+    console.log(res,"res")
+    chat.appendMessage({
+      body: res.data ,
+      type:"text",
+      sender: "bot",
+      id: 8,
+    })
+  })
+  .catch((err) => {
+
+    cahtLoding.setLoading(false)
+    chat.appendMessage({
+      body: res.data ,
+      type:"error",
+      sender: "bot",
+      id: 8,
+    })
+  })
+  
+
   }
 
-  const handleUpload = (result) => {
-    axios.post('/api/messages', {
-      image: result.info.secure_url,
-      conversationId: conversationId
-    })
-  }
+
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -80,13 +97,7 @@ const Form = () => {
         rounded-b-lg
       "
     >
-      {/* <CldUploadButton 
-        options={{ maxFiles: 1 }} 
-        onUpload={handleUpload} 
-        uploadPreset="pgc9ehd5"
-      >
-        <HiPhoto size={30} className="text-sky-500" />
-      </CldUploadButton> */}
+   
       <form 
         onSubmit={handleSubmit(onSubmit)}
         className="flex items-center gap-2 lg:gap-4 w-full"
@@ -96,7 +107,7 @@ const Form = () => {
           register={register} 
           errors={errors} 
           required 
-          placeholder="Write a message"
+          placeholder="سوال خود را بپرسید؟"
         />
         <button 
           type="submit" 

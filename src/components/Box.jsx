@@ -1,45 +1,30 @@
 'use client';
 
 import clsx from "clsx";
-import Image from "next/image";
-import { useState } from "react";
 import Avatar from "./Avatar";
-//import { format } from "date-fns";
-// import { useSession } from "next-auth/react";
-// import { FullMessageType } from "@/app/types";
+import Lottie from "lottie-react";
+import cahtLodingStore from "../store/chat.loading"
+import LoadingAiChatLottie from "../../public/loding.json"
 
-//import Avatar from "@/app/components/Avatar";
-//import ImageModal from "./ImageModal";
-
-// interface MessageBoxProps {
-//   data: FullMessageType;
-//   isLast?: boolean;
-// }
 
 const MessageBox = ({ 
   data, 
   isLast
 }) => {
-//   const session = useSession();
-  const [imageModalOpen, setImageModalOpen] = useState(false);
 
+  const cahtLoding = cahtLodingStore();
+ 
 
-//  const isOwn = session.data?.user?.email === data?.sender?.email
 const isOwn = data?.sender === "user" ? false : true;
 
-//   const seenList = (data.seen || [])
 
-//   .filter((user) => user.email !== data?.sender?.email)
-//     .map((user) => user.name)
-//     .join(', ');
-  const seenList = []
 
   const container = clsx('flex gap-3 p-4', isOwn && 'justify-end');
   const avatar = clsx(isOwn && 'order-2');
   const body = clsx('flex flex-col gap-2', isOwn && 'items-end');
   const message = clsx(
     'text-sm w-fit overflow-hidden', 
-    isOwn ? 'bg-sky-500 text-white' : 'bg-gray-100', 
+    isOwn ? 'bg-sky-500 text-white' : 'bg-gray-100 text-black', 
     data.image ? 'rounded-md p-0' : 'rounded-full py-2 px-3'
   );
 
@@ -53,28 +38,32 @@ const isOwn = data?.sender === "user" ? false : true;
           <div className="text-sm text-gray-500">
             {data?.sender || ""}
           </div>
-          {/* <div className="text-xs text-gray-400">
-            {format(new Date(data.createdAt), 'p')}
-          </div> */}
         </div>
-        <div className={message}>
-          {/* <ImageModal src={data.image} isOpen={imageModalOpen} onClose={() => setImageModalOpen(false)} /> */}
-            <div>{data.body}</div>
-        </div>
-        {/* {isLast && isOwn && seenList?.length > 0 && (
-          <div 
-            className="
-            text-xs 
-            font-light 
-            text-gray-500
-            "
-          >
-            {`Seen by `}
+       
+          <div className={message}>
+            <div st>{data.body}</div>
           </div>
-        )} */}
+          {cahtLoding.isLoading  && isLast? (
+            
+                  <Lottie
+                  style={{ width: 60, height: 40 }}
+                  width={60}
+                  height={20}
+                  animationData={LoadingAiChatLottie}
+                  loop={true}
+                  autoPlay={true}
+                  rendererSettings={{
+                    preserveAspectRatio: "xMidYMid slice",
+                  }}
+                />
+          ):(
+            <>
+            </>
+          )}
+        
       </div>
     </div>
-   );
+  );
 }
  
 export default MessageBox;
